@@ -96,6 +96,25 @@ function Dispatch(Circuit) {
         this.runCircuit();
     };
 
+    /*电源已打开时，重新计算并传播所有器件的输出（供自动化/MCP 修改状态后调用）*/
+    this.refresh = function () {
+        if (_this.runState != 1) return false;
+        initQueue();
+        _this.runCircuit();
+        return true;
+    };
+
+    /*电源已打开时，运行指定器件并把它的输出传播给相连器件（不改变其输入）*/
+    this.propagate = function (c) {
+        if (_this.runState != 1) return false;
+        if (typeof c == "string") c = Circuit.findById(c);
+        if (!c) return false;
+        if (typeof c.beReady == "function" && !c.beReady()) return false;
+        workQueue.push(c);
+        _this.runCircuit();
+        return true;
+    };
+
     this.powerOff = function () {
         this.runState = 0;
         for (var i = 0; i < cAll.length; i++) {

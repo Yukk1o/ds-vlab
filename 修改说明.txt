@@ -2,7 +2,9 @@
 (1)支持Ctrl+C、Ctrl+V、Ctrl+A、Ctrl+D快捷键；
 (2)拖动器件时自动吸附对齐，可在“编辑”菜单中关闭；
 (3)按住鼠标中键拖动画布；
-(4)新增“编辑”菜单。
+(4)新增“编辑”菜单；
+(5)新增 AI MCP 服务（mcp目录），可通过 Playwright 控制虚拟实验室；
+(6)js/circuitdiagram.js 新增 connectPins/removeLineById/removeComponentById/setComponentName 等自动化接口。
 修改时间：2026年11月25日；
 修改者：DS-VLAB contributors（社区增强版，非原作者）
 

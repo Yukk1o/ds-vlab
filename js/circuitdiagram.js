@@ -477,6 +477,94 @@ function Circuit() {
         ;
     };
 
+    /*
+     * 供自动化/MCP 使用的公开接口：按引脚 id 连接两个引脚。
+     * 会自动把输出引脚作为起点；成功返回连接线 id，失败返回 null。
+     */
+    this.connectPins = function (startPinId, endPinId) {
+        var startPin = document.getElementById(startPinId);
+        var endPin = document.getElementById(endPinId);
+        if (!startPin || !endPin || startPinId == endPinId) return null;
+
+        var p = startPinId.indexOf("Pin");
+        var startCompId = p > 0 ? startPinId.substring(0, p) : "";
+        p = endPinId.indexOf("Pin");
+        var endCompId = p > 0 ? endPinId.substring(0, p) : "";
+        if (!startCompId || !endCompId || startCompId == endCompId) return null;
+
+        var startComp = _this.findById(startCompId);
+        var endComp = _this.findById(endCompId);
+        if (!startComp || !endComp) return null;
+
+        var startNo = parseInt(startPinId.substring(startPinId.indexOf("Pin") + 3), 10);
+        var endNo = parseInt(endPinId.substring(endPinId.indexOf("Pin") + 3), 10);
+        if (isNaN(startNo) || isNaN(endNo)) return null;
+        if (startNo < 0 || startNo >= startComp.pinValue.length) return null;
+        if (endNo < 0 || endNo >= endComp.pinValue.length) return null;
+
+        function isSource(fun) { return fun == 1 || fun == 11; }
+        function isTarget(fun) { return fun == 0 || fun == 10 || fun == 11; }
+
+        var startFun = startComp.pinFunction[startNo];
+        var endFun = endComp.pinFunction[endNo];
+
+        //如果方向反了，自动交换起点和终点
+        if (!isSource(startFun) && isSource(endFun)) {
+            var tmpPin = startPin; startPin = endPin; endPin = tmpPin;
+            var tmpComp = startComp; startComp = endComp; endComp = tmpComp;
+            var tmpNo = startNo; startNo = endNo; endNo = tmpNo;
+            var tmpFun = startFun; startFun = endFun; endFun = tmpFun;
+        }
+        if (!isSource(startFun) || !isTarget(endFun)) return null;
+
+        //避免重复连接同一对引脚
+        var i, item;
+        for (i = 0; i < startComp.connection[startNo].length; i++) {
+            item = startComp.connection[startNo][i];
+            if (item[1].id == startPin.id && item[2].id == endPin.id) return item[0].id;
+        }
+
+        var line = _this.lineCreate("demo", 0, 0, 10, 10);
+        _this.lineAdjust(line, startPin, endPin);
+        _this.addLineToComponent(line, startPin, endPin);
+        return line.id;
+    };
+
+    //供自动化/MCP 使用：按连接线 id 删除一条连接线
+    this.removeLineById = function (lineId) {
+        var paths = document.querySelectorAll("#demo .div-line path.my-line");
+        var i;
+        for (i = 0; i < paths.length; i++) {
+            if (paths[i].id == lineId) {
+                lineDelete(paths[i]);
+                return true;
+            }
+        }
+        return false;
+    };
+
+    //供自动化/MCP 使用：按器件 id 删除器件及其连接线
+    this.removeComponentById = function (componentId) {
+        var compDiv = document.getElementById(componentId);
+        if (!compDiv) return false;
+        componentDelete(compDiv);
+        this.clearSelection();
+        return true;
+    };
+
+    //供自动化/MCP 使用：修改器件显示名称
+    this.setComponentName = function (componentId, name) {
+        var comp = _this.findById(componentId);
+        if (!comp) return false;
+        comp.customName = name;
+        var underLayer = document.getElementById(componentId + "UnderLayer");
+        if (underLayer) {
+            var strong = underLayer.querySelector("strong");
+            if (strong) strong.textContent = name;
+        }
+        return true;
+    };
+
 
     //删除连接线
     function lineDelete(line) {
@@ -547,7 +635,7 @@ function Circuit() {
         }
         ;
         deleteById(c.id);
-        c.remove(true);
+        $(c).remove();
 
     };
 

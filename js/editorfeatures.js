@@ -340,6 +340,22 @@ Address: Xiangnan University, Chenzhou Hunan, China
         setEnabled: setSnapEnabled
     };
 
+    //供自动化/MCP 调用的编辑接口
+    window.DSVEditor = {
+        copy: copySelection,
+        paste: pasteSelection,
+        selectAll: selectAll,
+        duplicate: duplicateSelection,
+        pasteAt: function (offsetX, offsetY) {
+            if (!clipboard) return [];
+            return window.mycircuit.pasteClipboard(clipboard, offsetX, offsetY);
+        },
+        duplicateAt: function (offsetX, offsetY) {
+            return window.mycircuit.duplicateSelection(offsetX, offsetY);
+        },
+        hasClipboard: function () { return !!clipboard; }
+    };
+
     window.initEditorEnhancements = function () {
         if (initialized) return;
         initialized = true;

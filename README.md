@@ -81,6 +81,37 @@ python -m http.server 8000
 
 然后访问 <http://localhost:8000/>。
 
+## AI MCP 控制（实验性）
+
+仓库新增 `mcp/` 目录，提供基于 Playwright 的 MCP 服务。配置好之后，AI 可以直接打开实验室、添加器件、连接引脚、设置开关、读写存储器、上电仿真和截图，并根据截图检查电路结果。
+
+### 快速开始
+
+```bash
+cd mcp
+npm install
+npm test        # 运行端到端测试
+```
+
+在 MCP 客户端中配置 stdio 启动命令：
+
+```text
+node C:/path/to/ds-vlab/mcp/server.js
+```
+
+OpenCode V2、Claude Desktop、Cursor 的完整配置示例见 [`mcp/README.md`](mcp/README.md)。
+
+### 可用工具
+
+- 会话：`lab_open`、`lab_close`、`lab_status`
+- 器件：`list_components`、`get_pins`、`add_component`、`move_component`、`rename_component`、`remove_component`
+- 连线：`connect_pins`、`list_connections`、`remove_connection`
+- 仿真：`set_switch`、`pulse`、`power`、`get_memory`、`set_memory`
+- 编辑与画布：`edit`、`set_snap`、`pan_canvas`、`screenshot`
+- 文件：`export_circuit`、`import_circuit`、`new_circuit`
+
+> MCP 服务需要 Node.js 18+ 和 Chrome/Edge；默认会打开一个由 AI 控制的独立浏览器窗口。无图形界面环境可设置 `DSVLAB_HEADLESS=1`。
+
 ## 目录结构
 
 ```text
@@ -99,6 +130,11 @@ python -m http.server 8000
 │   └── lib/                # jQuery、jQuery UI、取色器
 ├── files/                  # 实验指导、芯片资料、示例电路
 ├── docs/                   # README 截图
+├── mcp/                    # AI MCP 服务（Playwright）
+│   ├── server.js           # MCP 工具定义
+│   ├── lab.js              # 浏览器会话与本地静态服务器
+│   ├── test-client.js      # 端到端测试
+│   └── README.md           # MCP 配置与工具说明
 ├── license.txt             # 原始许可证与版权声明
 ├── LICENSE                 # AGPL-3.0 许可证全文
 ├── NOTICE                  # 原作品与社区修改部分的版权说明
@@ -115,6 +151,9 @@ python -m http.server 8000
 4. `js/toolbox.js` 修正画布平移后的拖放坐标换算。
 5. `index.html` 增加“编辑”菜单、`editorfeatures.js` 引用和 UTF-8 编码声明；`index.html` 与 `js/circuitdiagram.js` 统一为 UTF-8 编码。
 6. 新增吸附辅助线、画布平移光标和操作提示样式。
+7. 新增 `mcp/` MCP 服务，让 AI 可以通过 Playwright 操作实验室：增删器件、连线、开关、脉冲、电源、存储器读写、截图、导入导出电路。
+8. `js/circuitdiagram.js` 新增 `connectPins`、`removeLineById`、`removeComponentById`、`setComponentName` 等自动化接口，并修复器件删除时的 DOM 清理。
+9. `js/dispatch.js` 新增 `refresh` 和 `propagate`，用于修改开关或存储器后立即传播状态。
 
 原有功能（芯片仿真、连线、保存/打开、电源/复位、存储器读写、连接线颜色、时钟周期等）保持不变。
 

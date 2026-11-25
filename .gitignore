@@ -9,3 +9,8 @@ Desktop.ini
 # Local editor settings
 .vscode/
 .idea/
+
+# MCP dependencies and test artifacts
+mcp/node_modules/
+mcp/test-results/
+mcp/playwright-report/
