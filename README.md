@@ -100,6 +100,7 @@ python -m http.server 8000
 ├── docs/                   # README 截图
 ├── license.txt             # 原始许可证与版权声明
 ├── LICENSE                 # AGPL-3.0 许可证全文
+├── NOTICE                  # 原作品与社区修改部分的版权说明
 └── README.md
 ```
 
@@ -121,7 +122,7 @@ python -m http.server 8000
 - 原项目及本仓库整体采用 **GNU Affero General Public License v3.0 or later**（AGPL-3.0-or-later）。
 - 原项目版权：**Copyright (C) 2013 张雯雰（ZHANG Wen-fen）**，邮箱：<yydzhwf@xnu.edu.cn>，单位：湘南学院计算机与人工智能学院。
 - 本版本新增/修改部分：Copyright (C) 2026 DS-VLAB contributors。
-- 原始版权声明保留在源文件头部、“关于虚拟实验室”对话框和 `license.txt` 中。
+- 原始版权声明保留在源文件头部、“关于虚拟实验室”对话框、`license.txt` 和 [`NOTICE`](NOTICE) 中。
 - 许可证全文见 [`LICENSE`](LICENSE) 和 [`license.txt`](license.txt)。
 
 你可以自由复制、修改和再发布本程序，但必须遵守 AGPL-3.0 的条款，包括保留版权声明、提供完整源代码，以及通过网络提供服务时向用户提供对应源代码。

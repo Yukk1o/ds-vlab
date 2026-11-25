@@ -1,0 +1,19 @@
+DS-VLAB 2.0 / 多思计算机组成原理网络虚拟实验系统
+
+Original work:
+  Copyright (C) 2013 ZHANG Wen-fen (张雯雰)
+  Email: yydzhwf@xnu.edu.cn
+  Xiangnan University, Chenzhou, Hunan, China
+  湘南学院计算机与人工智能学院
+
+Original project source files retain their copyright headers. See license.txt
+for the original copyright notice and the GNU Affero General Public License.
+
+This repository is a community-enhanced edition. The editor enhancements
+(clipboard shortcuts, snap-to-align guides, middle-button canvas panning and
+the related UI) are:
+  Copyright (C) 2026 DS-VLAB contributors
+
+The combined work is distributed under the GNU Affero General Public License,
+version 3 or any later version (AGPL-3.0-or-later). See LICENSE for the full
+license text.
