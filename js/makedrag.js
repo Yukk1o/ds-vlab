@@ -26,6 +26,22 @@ function dragEnabled(o, s) {
         //只响应鼠标左键，右键用于删除，中键用于平移画布
         if (a.button !== undefined && a.button !== 0) return;
 
+        //左键点击器件时选中它；若它已在多选组中，则保留整组选择
+        if (window.mycircuit) {
+            var selected = mycircuit.selectedComponents || [];
+            var isSelected = false;
+            for (var si = 0; si < selected.length; si++) {
+                if (selected[si] && selected[si].id === o.id) {
+                    isSelected = true;
+                    break;
+                }
+            }
+            if (!isSelected) {
+                var clickedComp = mycircuit.findById(o.id);
+                if (clickedComp) mycircuit.selectComponents([clickedComp], false);
+            }
+        }
+
         this.style.zIndex = 10000;
         var d = document;
         var startX = a.clientX;
